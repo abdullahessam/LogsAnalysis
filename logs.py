@@ -17,17 +17,17 @@ on path like '%' || slug.slug   group by log.path order by num desc ;
     print "Popular articles "
     print "Path                 |count"
     for article in articles:
-        print "{0}  | {1}".format(article[0],article[1])
-
+        print "{0}  | {1}".format(article[0], article[1])
 
 
 getPopularArticles()
 
+
 def getPopularAuther():
     db = psycopg2.connect("dbname=news")
     c = db.cursor()
-    q="""
-  
+    q = """
+
 select name , count(slug),sum(num) from authors, articles, posts
 where articles.author=authors.id  and
 posts.path like '%' || articles.slug
@@ -42,7 +42,8 @@ posts.path like '%' || articles.slug
     print "Popular Authors "
     print "Author         |articles        |views"
     for author in authors:
-        print "{0}  | {1}   | {2}".format(author[0], author[1],author[2])
+        print "{0}  | {1}   | {2}".format(author[0], author[1], author[2])
+
 
 getPopularAuther()
 
@@ -68,6 +69,7 @@ def getdaterrors():
     print "day has more than 1% errors"
     print "day         |    fail requests       |   all requests | percent"
     for error in errors:
-        print "{0}  | {1}   | {2}   |{3} %".format(error[0], error[1], error[2],error[3])
+        print "{0}  | {1}   | {2}   |{3} %".format(error[0], error[1], error[2], error[3])
+
 
 getdaterrors()
