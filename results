@@ -1,0 +1,51 @@
+ select log.path ,count(log.path) as num
+from log  inner join (select slug from articles) as slug
+on path like '%' || slug.slug   group by log.path order by num desc limit 3;
+
+            path             |  num
+-----------------------------+--------
+ /article/candidate-is-jerk  | 338647
+ /article/bears-love-berries | 253801
+ /article/bad-things-gone    | 170098
+
+create  or replace view  posts as  select log.path ,count(log.path) as num
+from log  inner join (select slug from articles) as slug
+on path like '%' || slug.slug   group by log.path order by num desc ;
+
+select name , count(slug),sum(num) from authors, articles, posts
+where articles.author=authors.id  and
+posts.path like '%' || articles.slug
+ group by name
+ order by sum desc limit 3 ;
+
+          name          | count |  sum
+------------------------+-------+--------
+ Ursula La Multa        |     4 | 507594
+ Rudolf von Treppenwitz |     2 | 423457
+ Anonymous Contributor  |     1 | 170098
+
+
+
+
+all requests => select date(time),count(status) as num  from log   group by date(time)   ;
+fail requests =>  select date(time),count(status)  as num from log   where status!='200 OK' group by date(time) , status  ;
+
+
+create  or replace view allreq as select date(time),count(status) as num  from log   group by date(time)   ;
+create  or replace view fail as select date(time),count(status)  as num from log   where status!='200 OK' group by date(time) , status  ;
+
+ select f.date as day , f.num as fail ,a.num  as all,(cast(f.num as float)/cast(a.num as float)) *100  as percent
+ from allreq as a inner join fail as f on a.date=f.date
+  where (cast(f.num as float)/cast(a.num as float)) *100 > 1
+   order by percent desc
+    limit 1 ;
+
+
+    day     | fail |  all  |     percent
+------------+------+-------+------------------
+ 2016-07-17 | 1265 | 55907 | 2.26268624680273
+(1 row)
+
+
+
+
