@@ -1,8 +1,17 @@
-i made 3 function to execute queries
+i made 4 function to execute queries
  just call the function and it will execute the query
  the output should be on the terminal
- i used 3 views it's inculded to the function you don't have to run it
+ i used 3 views it's included to the function you don't have to run it
  here is the commands for the views
+ for setup use command psql -d news -f newsdata.sql
+ to install  database in the psql
+ create python file
+ and import psycopg2 module
+ then connect database by db = psycopg2.connect("dbname=news")
+ create object     c = db.cursor()
+ and for execute queries use c.execute('query')
+
+i used function named createviews() to execute the views first  
 
  create or replace view posts as  select log.path ,count(log.path) as num
 from log  inner join (select slug from articles) as slug
